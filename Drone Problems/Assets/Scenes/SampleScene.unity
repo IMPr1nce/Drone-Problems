@@ -623,6 +623,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8039118867989910084, guid: 06709327534514aa7883e283fb158601, type: 3}
+      propertyPath: drone
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4497431471462254722, guid: 06709327534514aa7883e283fb158601, type: 3}
       propertyPath: firePoint
       value: 
@@ -1140,7 +1144,7 @@ GameObject:
   - component: {fileID: 1039665852}
   m_Layer: 3
   m_Name: ground
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1372,12 +1376,13 @@ MonoBehaviour:
   forwardFocus: {fileID: 0}
   moveSpeed: 4
   turnSpeed: 100
-  shootingDistance: 1
   bulletPrefab: {fileID: 0}
   leftFirePoint: {fileID: 0}
   rightFirePoint: {fileID: 0}
+  shootingDistance: 1
   bulletSpeed: 30
   fireCooldown: 1
+  aimHeight: 1
   aimAngleTolerance: 5
 --- !u!1 &1858084318
 GameObject:
@@ -1526,8 +1531,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00afe0f75034b4cd293e7853b7bc25a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  Speed: 5
-  rotationSpeed: 5
+  Speed: 10
+  rotationSpeed: 10
   gravityAccel: -9.81
   groundCheck: {fileID: 295569428}
   groundLayer:
@@ -1616,7 +1621,7 @@ GameObject:
   - component: {fileID: 2064205296}
   - component: {fileID: 2064205295}
   - component: {fileID: 2064205294}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1710,8 +1715,8 @@ Transform:
   m_GameObject: {fileID: 2064205293}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.21, y: 0.54, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -11.21, y: 6.8311, z: 5.8621}
+  m_LocalScale: {x: 1, y: 13.467803, z: 12.724406}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

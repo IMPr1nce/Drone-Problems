@@ -248,6 +248,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 599faf2c87be748099943f693c57f7ff, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4497431471462254722}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 599faf2c87be748099943f693c57f7ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8039118867989910084}
     - targetCorrespondingSourceObject: {fileID: -8391222552659086748, guid: 599faf2c87be748099943f693c57f7ff, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2901169676760950304}
@@ -730,13 +733,45 @@ MonoBehaviour:
   forwardFocus: {fileID: 3331001037121821167}
   moveSpeed: 5
   turnSpeed: 720
-  shootingDistance: 10
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 72
+  collisionRadius: 0.75
+  collisionPadding: 0.2
   bulletPrefab: {fileID: 7416226564968033269, guid: 74d22391f8cce4a9bb95334afd1b415f, type: 3}
   leftFirePoint: {fileID: 8850501233856776733}
   rightFirePoint: {fileID: 5071511776354022970}
+  shootingDistance: 10
   bulletSpeed: 30
   fireCooldown: 0.5
+  aimHeight: 1
   aimAngleTolerance: 5
+--- !u!114 &-8039118867989910084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5047811610492261047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b922d2eaccf0341caa83803de2b03a6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  drone: {fileID: 4497431471462254722}
+  roamRadius: 12
+  minRoamDistance: 5
+  roamWaitTime: 0.5
+  roamPointReachDistance: 10
+  roamPointAttempts: 30
+  detectionRange: 25
+  loseRange: 50
+  visionAngle: 180
+  useVisionAngle: 0
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 72
+  losePlayerDelay: 1
 --- !u!4 &5568346101037893645 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 599faf2c87be748099943f693c57f7ff, type: 3}

@@ -13,6 +13,23 @@ public class Drone_bullet : MonoBehaviour
         moveDirection = direction.normalized;
         moveSpeed = speed;
         isReady = true;
+
+        Collider bulletCollider = GetComponent<Collider>();
+
+        if (bulletCollider != null)
+        {
+            bulletCollider.isTrigger = true;
+        }
+
+        Rigidbody rb = GetComponent<Rigidbody>();
+
+        if (rb == null)
+        {
+            rb = gameObject.AddComponent<Rigidbody>();
+        }
+
+        rb.useGravity = false;
+        rb.isKinematic = true;
     }
 
     void Start()
