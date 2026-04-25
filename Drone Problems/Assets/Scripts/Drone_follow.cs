@@ -9,6 +9,15 @@ public class Drone_follow : MonoBehaviour
     public float turnSpeed = 720f;
     public float shootingDistance = 8f;
 
+    [Header("Shooting")]
+    public GameObject bulletPrefab;
+    public Transform leftFirePoint;
+    public Transform rightFirePoint;
+    public float bulletSpeed = 25f;
+    public float fireCooldown = 1f;
+    public float aimAngleTolerance = 5f;
+
+    private float nextFireTime = 0f;
     private Quaternion modelOffset;
 
     void Start()
@@ -40,11 +49,7 @@ public class Drone_follow : MonoBehaviour
         Vector3 toTarget = target.position - transform.position;
         float distance = toTarget.magnitude;
 
-        if (distance <= shootingDistance)
-        {
-            Debug.Log("Shooting at the target!");
-            return;
-        }
+        if (toTarget == Vector3.zero) return;
 
         Quaternion targetRotation =
             Quaternion.LookRotation(toTarget.normalized) * modelOffset;
@@ -55,10 +60,70 @@ public class Drone_follow : MonoBehaviour
             turnSpeed * Time.deltaTime
         );
 
+        if (distance <= shootingDistance)
+        {
+            float angleToTarget = Quaternion.Angle(transform.rotation, targetRotation);
+
+            if (angleToTarget <= aimAngleTolerance)
+            {
+                ShootAtTarget(toTarget.normalized);
+            }
+
+            return;
+        }
+
         transform.position = Vector3.MoveTowards(
             transform.position,
             target.position,
             moveSpeed * Time.deltaTime
         );
+    }
+
+    void ShootAtTarget(Vector3 shootDirection)
+    {
+        if (Time.time < nextFireTime)
+        {
+            return;
+        }
+
+        bool firedLeft = FireBullet(leftFirePoint, shootDirection);
+        bool firedRight = FireBullet(rightFirePoint, shootDirection);
+
+        if (firedLeft || firedRight)
+        {
+            Debug.Log("Drone shot at the player!");
+            nextFireTime = Time.time + fireCooldown;
+        }
+    }
+
+    bool FireBullet(Transform firePoint, Vector3 shootDirection)
+    {
+        if (firePoint == null)
+        {
+            return false;
+        }
+
+        if (bulletPrefab == null)
+        {
+            Debug.LogWarning("Bullet Prefab is missing on the drone.");
+            return false;
+        }
+
+        GameObject newBullet = Instantiate(
+            bulletPrefab,
+            firePoint.position,
+            Quaternion.LookRotation(shootDirection)
+        );
+
+        Drone_bullet bulletScript = newBullet.GetComponent<Drone_bullet>();
+
+        if (bulletScript == null)
+        {
+            bulletScript = newBullet.AddComponent<Drone_bullet>();
+        }
+
+        bulletScript.SetDirection(shootDirection, bulletSpeed);
+
+        return true;
     }
 }

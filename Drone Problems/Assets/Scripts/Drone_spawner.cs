@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class Drone_spawner : MonoBehaviour
 {
+    [Header("Spawner Setup")]
     public GameObject dronePrefab;
     public Transform player;
 
+    [Header("Spawn Settings")]
     public int maxDrones = 5;
     public float spawnRadius = 20f;
     public float minSpawnDistance = 10f;
@@ -16,14 +18,7 @@ public class Drone_spawner : MonoBehaviour
 
     void Start()
     {
-        if (player == null)
-        {
-            GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-            if (playerObject != null)
-            {
-                player = playerObject.transform;
-            }
-        }
+        FindPlayerIfNeeded();
 
         for (int i = 0; i < maxDrones; i++)
         {
@@ -33,6 +28,8 @@ public class Drone_spawner : MonoBehaviour
 
     void Update()
     {
+        FindPlayerIfNeeded();
+
         activeDrones.RemoveAll(drone => drone == null);
 
         while (activeDrones.Count < maxDrones)
@@ -41,12 +38,43 @@ public class Drone_spawner : MonoBehaviour
         }
     }
 
+    void FindPlayerIfNeeded()
+    {
+        if (player != null)
+        {
+            return;
+        }
+
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+
+        if (playerObject != null)
+        {
+            player = playerObject.transform;
+        }
+    }
+
     void SpawnDrone()
     {
-        if (dronePrefab == null || player == null) return;
+        if (dronePrefab == null || player == null)
+        {
+            return;
+        }
 
         Vector3 spawnPosition = GetSpawnPosition();
-        GameObject newDrone = Instantiate(dronePrefab, spawnPosition, Quaternion.identity);
+
+        GameObject newDrone = Instantiate(
+            dronePrefab,
+            spawnPosition,
+            Quaternion.identity
+        );
+
+        Drone_follow droneFollow = newDrone.GetComponent<Drone_follow>();
+
+        if (droneFollow != null)
+        {
+            droneFollow.target = player;
+        }
+
         activeDrones.Add(newDrone);
     }
 
@@ -55,12 +83,12 @@ public class Drone_spawner : MonoBehaviour
         Vector2 circle = Random.insideUnitCircle.normalized * Random.Range(minSpawnDistance, spawnRadius);
         float yOffset = Random.Range(spawnHeightMin, spawnHeightMax);
 
-        Vector3 spawnPos = new Vector3(
+        Vector3 spawnPosition = new Vector3(
             player.position.x + circle.x,
             player.position.y + yOffset,
             player.position.z + circle.y
         );
 
-        return spawnPos;
+        return spawnPosition;
     }
 }

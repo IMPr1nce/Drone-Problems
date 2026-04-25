@@ -730,7 +730,13 @@ MonoBehaviour:
   forwardFocus: {fileID: 3331001037121821167}
   moveSpeed: 5
   turnSpeed: 720
-  shootingDistance: 5
+  shootingDistance: 10
+  bulletPrefab: {fileID: 7416226564968033269, guid: 74d22391f8cce4a9bb95334afd1b415f, type: 3}
+  leftFirePoint: {fileID: 8850501233856776733}
+  rightFirePoint: {fileID: 5071511776354022970}
+  bulletSpeed: 30
+  fireCooldown: 0.5
+  aimAngleTolerance: 5
 --- !u!4 &5568346101037893645 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 599faf2c87be748099943f693c57f7ff, type: 3}
