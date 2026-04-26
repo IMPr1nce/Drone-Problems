@@ -87,44 +87,48 @@ public class Drone_AI : MonoBehaviour
     }
 
     IEnumerator AttackRoutine()
+{
+    lostPlayerTimer = 0f;
+
+    while (drone.target != null)
     {
-        lostPlayerTimer = 0f;
-
-        while (drone.target != null)
+        if (CanKeepTrackingPlayer())
         {
-            if (CanKeepTrackingPlayer())
-            {
-                lostPlayerTimer = 0f;
-            }
-            else
-            {
-                lostPlayerTimer += Time.deltaTime;
-
-                if (lostPlayerTimer >= losePlayerDelay)
-                {
-                    yield break;
-                }
-            }
-
-            Vector3 movementTarget = drone.target.position;
-            Vector3 aimTarget = drone.target.position + Vector3.up * drone.aimHeight;
-
-            float distanceToPlayer = Vector3.Distance(transform.position, drone.target.position);
-
-            drone.RotateTowardPointFree(aimTarget);
-
-            if (distanceToPlayer > drone.shootingDistance)
-            {
-                drone.MoveTowardPointFree(movementTarget);
-            }
-            else
-            {
-                drone.ShootAtTarget();
-            }
-
-            yield return null;
+            lostPlayerTimer = 0f;
         }
+        else
+        {
+            lostPlayerTimer += Time.deltaTime;
+
+            if (lostPlayerTimer >= losePlayerDelay)
+            {
+                yield break;
+            }
+        }
+
+        Vector3 movementTarget = drone.target.position;
+        Vector3 aimTarget = drone.target.position + Vector3.up * drone.aimHeight;
+
+        float distanceToPlayer = Vector3.Distance(transform.position, drone.target.position);
+
+        // Always fix angle toward the player, even when the drone stops moving.
+        drone.RotateTowardPointFree(aimTarget);
+
+        // Shoot whenever inside shooting range.
+        if (distanceToPlayer <= drone.shootingDistance)
+        {
+            drone.ShootAtTarget();
+        }
+
+        // Keep moving toward the player until the drone reaches the boundary.
+        if (distanceToPlayer > drone.attackBoundaryDistance)
+        {
+            drone.MoveTowardPointFree(movementTarget);
+        }
+
+        yield return null;
     }
+}
 
     Vector3 GetRandomRoamPoint()
     {

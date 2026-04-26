@@ -24,6 +24,7 @@ public class Drone_follow : MonoBehaviour
     public float fireCooldown = 0.5f;
     public float aimHeight = 1f;
     public float aimAngleTolerance = 20f;
+    public float attackBoundaryDistance = 5f;
 
     private float nextFireTime = 0f;
     private Quaternion modelOffset = Quaternion.identity;
