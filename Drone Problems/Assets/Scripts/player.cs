@@ -15,6 +15,9 @@ public class player : MonoBehaviour
     public int maxHealth = 100;
     public int health = 100;
 
+    [Header("Coins")]
+    public int coins = 0;
+
     public float bulletSpeed = 20f;
     public float fireInterval = 0.2f;
 
@@ -39,6 +42,7 @@ public class player : MonoBehaviour
         gravity_velocity = new Vector3(0, -2, 0);
         current_bullets = max_bullets;
         health = maxHealth;
+        coins = 0;
     }
 
     void Update()
@@ -123,12 +127,23 @@ public class player : MonoBehaviour
     {
         health -= damageAmount;
 
+        if (health < 0)
+        {
+            health = 0;
+        }
+
         Debug.Log("Player took " + damageAmount + " damage. Health: " + health);
 
         if (health <= 0)
         {
             Die();
         }
+    }
+
+    public void AddCoins(int amount)
+    {
+        coins += amount;
+        Debug.Log("Coins: " + coins);
     }
 
     void Die()
