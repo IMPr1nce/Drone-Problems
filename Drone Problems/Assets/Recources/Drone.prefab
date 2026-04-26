@@ -745,7 +745,7 @@ MonoBehaviour:
   bulletSpeed: 30
   fireCooldown: 0.5
   aimHeight: 1
-  aimAngleTolerance: 5
+  aimAngleTolerance: 1
   attackBoundaryDistance: 10
 --- !u!114 &-8039118867989910084
 MonoBehaviour:

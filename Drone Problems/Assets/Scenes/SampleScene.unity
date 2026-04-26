@@ -1376,6 +1376,11 @@ MonoBehaviour:
   forwardFocus: {fileID: 0}
   moveSpeed: 4
   turnSpeed: 100
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  collisionRadius: 0.75
+  collisionPadding: 0.2
   bulletPrefab: {fileID: 0}
   leftFirePoint: {fileID: 0}
   rightFirePoint: {fileID: 0}
@@ -1384,6 +1389,7 @@ MonoBehaviour:
   fireCooldown: 1
   aimHeight: 1
   aimAngleTolerance: 5
+  attackBoundaryDistance: 5
 --- !u!1 &1858084318
 GameObject:
   m_ObjectHideFlags: 0
@@ -1399,7 +1405,7 @@ GameObject:
   - component: {fileID: 1858084323}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1423,7 +1429,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1.5
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -1533,16 +1539,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   Speed: 10
   rotationSpeed: 10
+  shootingScript: {fileID: 340310210}
+  max_bullets: 100
+  current_bullets: 0
+  maxHealth: 100
+  health: 100
+  bulletSpeed: 20
+  fireInterval: 0.2
   gravityAccel: -9.81
   groundCheck: {fileID: 295569428}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  shootingScript: {fileID: 340310210}
-  max_bullets: 100
-  current_bullets: 0
-  bulletSpeed: 20
-  fireInterval: 0.2
   jumppower: 10
 --- !u!1001 &1858374844
 PrefabInstance:
