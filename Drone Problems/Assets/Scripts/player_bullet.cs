@@ -12,10 +12,16 @@ public class player_bullet : MonoBehaviour
     public Transform frontPoint;
     public Transform backPoint;
 
+    private Transform ownerRoot;
     private Vector3 moveDirection;
     private float moveSpeed;
     private bool isReady = false;
     private bool hasHit = false;
+
+    public void SetOwner(Transform owner)
+    {
+        ownerRoot = owner;
+    }
 
     public void SetDirection(Vector3 direction, float speed, float lifeTime)
     {
@@ -120,7 +126,7 @@ public class player_bullet : MonoBehaviour
             return false;
         }
 
-        if (other.CompareTag("Player"))
+        if (ownerRoot != null && other.transform.IsChildOf(ownerRoot))
         {
             return false;
         }

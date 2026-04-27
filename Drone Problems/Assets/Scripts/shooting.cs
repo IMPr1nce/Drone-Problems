@@ -2,79 +2,85 @@ using UnityEngine;
 
 public class shooting : MonoBehaviour
 {
-    [Header("Shooting Setup")]
-    public GameObject bulletPrefab;
-    public Transform firePoint;
-
     [Header("Aim Setup")]
     public Camera aimCamera;
-    public float maxAimDistance = 1000f;
-    public LayerMask aimMask = ~0;
-
-    [Header("Bullet Settings")]
-    public float bulletSpeed = 80f;
-    public float bulletLifeTime = 5f;
+    public float shootDistance = 1000f;
+    public float hitRadius = 0.4f;
+    public LayerMask shootMask = ~0;
 
     public void Shoot()
     {
-        if (bulletPrefab == null)
-        {
-            Debug.LogWarning("Bullet Prefab is missing.");
-            return;
-        }
-
-        if (firePoint == null)
-        {
-            Debug.LogWarning("Fire Point is missing.");
-            return;
-        }
-
-        Vector3 shootDirection = GetShootDirection();
-
-        GameObject newBullet = Instantiate(
-            bulletPrefab,
-            firePoint.position,
-            Quaternion.identity
-        );
-
-        player_bullet bulletScript = newBullet.GetComponent<player_bullet>();
-
-        if (bulletScript == null)
-        {
-            bulletScript = newBullet.AddComponent<player_bullet>();
-        }
-
-        bulletScript.SetDirection(shootDirection, bulletSpeed, bulletLifeTime);
-    }
-
-    Vector3 GetShootDirection()
-    {
-        Camera cameraToUse = aimCamera;
+        Camera cameraToUse = GetCamera();
 
         if (cameraToUse == null)
         {
-            cameraToUse = Camera.main;
+            Debug.LogWarning("No camera found for shooting.");
+            return;
         }
 
-        if (cameraToUse != null)
+        Ray ray = cameraToUse.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+
+        Debug.DrawRay(ray.origin, ray.direction * shootDistance, Color.red, 1f);
+
+        RaycastHit[] hits = Physics.SphereCastAll(
+            ray,
+            hitRadius,
+            shootDistance,
+            shootMask,
+            QueryTriggerInteraction.Collide
+        );
+
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        foreach (RaycastHit hit in hits)
         {
-            Ray ray = cameraToUse.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-
-            Vector3 aimPoint = ray.GetPoint(maxAimDistance);
-
-            if (Physics.Raycast(ray, out RaycastHit hit, maxAimDistance, aimMask, QueryTriggerInteraction.Ignore))
+            if (hit.collider.CompareTag("Player"))
             {
-                aimPoint = hit.point;
+                continue;
             }
 
-            Vector3 directionFromFirePoint = aimPoint - firePoint.position;
-
-            if (directionFromFirePoint != Vector3.zero)
+            if (hit.collider.GetComponentInParent<player>() != null)
             {
-                return directionFromFirePoint.normalized;
+                continue;
             }
+
+            Drone_follow drone = hit.collider.GetComponentInParent<Drone_follow>();
+
+            if (drone != null)
+            {
+                Debug.Log("Player shot and destroyed drone: " + drone.name);
+                Destroy(drone.gameObject);
+                return;
+            }
+
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                Debug.Log("Player shot and destroyed enemy: " + hit.collider.name);
+                Destroy(hit.collider.transform.root.gameObject);
+                return;
+            }
+
+            Debug.Log("Shot hit object: " + hit.collider.name);
+            return;
         }
 
-        return firePoint.forward.normalized;
+        Debug.Log("Shot missed.");
+    }
+
+    Camera GetCamera()
+    {
+        if (aimCamera != null)
+        {
+            return aimCamera;
+        }
+
+        Camera cameraOnThisObject = GetComponent<Camera>();
+
+        if (cameraOnThisObject != null)
+        {
+            return cameraOnThisObject;
+        }
+
+        return Camera.main;
     }
 }

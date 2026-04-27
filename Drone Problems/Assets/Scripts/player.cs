@@ -90,26 +90,33 @@ public class player : MonoBehaviour
     }
 
     public void shoot()
+{
+    if (shootingScript == null)
     {
+        shootingScript = FindFirstObjectByType<shooting>();
+
         if (shootingScript == null)
         {
+            Debug.LogWarning("No shooting script found. Assign Main Camera to Shooting Script on Player.");
             return;
         }
-
-        if (Time.time < nextShootTime)
-        {
-            return;
-        }
-
-        if (current_bullets <= 0)
-        {
-            return;
-        }
-
-        shootingScript.Shoot();
-        current_bullets--;
-        nextShootTime = Time.time + fireInterval;
     }
+
+    if (Time.time < nextShootTime)
+    {
+        return;
+    }
+
+    if (current_bullets <= 0)
+    {
+        Debug.Log("Out of bullets.");
+        return;
+    }
+
+    shootingScript.Shoot();
+    current_bullets--;
+    nextShootTime = Time.time + fireInterval;
+}
 
     public void Jump()
     {
