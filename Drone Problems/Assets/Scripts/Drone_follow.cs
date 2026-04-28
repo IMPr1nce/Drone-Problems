@@ -257,37 +257,38 @@ public class Drone_follow : MonoBehaviour
     }
 
     bool FireBullet(Transform firePoint, Vector3 targetPosition)
+{
+    if (firePoint == null)
     {
-        if (firePoint == null)
-        {
-            return false;
-        }
-
-        if (bulletPrefab == null)
-        {
-            Debug.LogWarning("Bullet Prefab is missing on the drone.");
-            return false;
-        }
-
-        Vector3 shootDirection = (targetPosition - firePoint.position).normalized;
-
-        GameObject newBullet = Instantiate(
-            bulletPrefab,
-            firePoint.position,
-            Quaternion.LookRotation(shootDirection)
-        );
-
-        Drone_bullet bulletScript = newBullet.GetComponent<Drone_bullet>();
-
-        if (bulletScript == null)
-        {
-            bulletScript = newBullet.AddComponent<Drone_bullet>();
-        }
-
-        bulletScript.SetDirection(shootDirection, bulletSpeed);
-
-        return true;
+        return false;
     }
+
+    if (bulletPrefab == null)
+    {
+        Debug.LogWarning("Bullet Prefab is missing on the drone.");
+        return false;
+    }
+
+    Vector3 shootDirection = (targetPosition - firePoint.position).normalized;
+
+    GameObject newBullet = Instantiate(
+        bulletPrefab,
+        firePoint.position,
+        Quaternion.identity
+    );
+
+    Drone_bullet bulletScript = newBullet.GetComponent<Drone_bullet>();
+
+    if (bulletScript == null)
+    {
+        bulletScript = newBullet.AddComponent<Drone_bullet>();
+    }
+
+    bulletScript.SetOwner(transform);
+    bulletScript.SetDirection(shootDirection, bulletSpeed);
+
+    return true;
+}
 
     public Vector3 GetDroneForwardDirection()
     {

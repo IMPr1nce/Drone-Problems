@@ -120,11 +120,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 34c2253493ea348bc822a0657e3d4f30, type: 3}
       propertyPath: m_Name
-      value: player_Bullet
+      value: Drone_bullet
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 34c2253493ea348bc822a0657e3d4f30, type: 3}
       propertyPath: m_TagString
-      value: Player_bullet
+      value: Enemy_bullet
       objectReference: {fileID: 0}
     - target: {fileID: 6317578925029434746, guid: 34c2253493ea348bc822a0657e3d4f30, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -155,7 +155,7 @@ PrefabInstance:
       addedObject: {fileID: -8112641054406127939}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 34c2253493ea348bc822a0657e3d4f30, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6643964256475562076}
+      addedObject: {fileID: -4048852283534779216}
     - targetCorrespondingSourceObject: {fileID: -5568371526223589888, guid: 34c2253493ea348bc822a0657e3d4f30, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7578000881149461537}
@@ -326,7 +326,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6643964256475562076
+--- !u!114 &-4048852283534779216
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -335,10 +335,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7510131014161942496}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a607a7a10ab42408dbc30a521489890e, type: 3}
+  m_Script: {fileID: 11500000, guid: df8a7bf9df7f94b1799d77bcd696689d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::player_bullet
-  damage: 100
-  hitRadius: 0.15
+  m_EditorClassIdentifier: Assembly-CSharp::Drone_bullet
+  damage: 10
+  lifeTime: 5
+  hitRadius: 0.2
   frontPoint: {fileID: 8502633638831586700}
   backPoint: {fileID: 2718225967351190650}

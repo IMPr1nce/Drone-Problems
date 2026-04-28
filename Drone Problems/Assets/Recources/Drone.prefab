@@ -209,6 +209,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 7202271454713460447, guid: 599faf2c87be748099943f693c57f7ff, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2e98fac8034114c9c809389a67b0357c, type: 2}
     - target: {fileID: 8416272007918961125, guid: 599faf2c87be748099943f693c57f7ff, type: 3}
       propertyPath: m_TagString
       value: Enemy
@@ -738,7 +742,7 @@ MonoBehaviour:
     m_Bits: 72
   collisionRadius: 0.75
   collisionPadding: 0.2
-  bulletPrefab: {fileID: 7416226564968033269, guid: 74d22391f8cce4a9bb95334afd1b415f, type: 3}
+  bulletPrefab: {fileID: 7510131014161942496, guid: 4f8b27db7e57248fe825fc8843aa7a51, type: 3}
   leftFirePoint: {fileID: 8850501233856776733}
   rightFirePoint: {fileID: 5071511776354022970}
   shootingDistance: 300
