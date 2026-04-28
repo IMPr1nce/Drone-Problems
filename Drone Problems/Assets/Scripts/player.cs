@@ -153,6 +153,19 @@ public class player : MonoBehaviour
         Debug.Log("Coins: " + coins);
     }
 
+
+    public void AddBullets(int amount)
+    {
+        current_bullets += amount;
+
+        if (current_bullets > max_bullets)
+        {
+            current_bullets = max_bullets;
+        }
+
+        Debug.Log("Bullets: " + current_bullets);
+    }
+
     void Die()
     {
         Debug.Log("Player died.");
