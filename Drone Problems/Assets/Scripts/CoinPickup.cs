@@ -4,7 +4,6 @@ public class CoinPickup : MonoBehaviour
 {
     public int coinValue = 1;
     public float rotationSpeed = 120f;
-
     void Update()
     {
         transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.World);

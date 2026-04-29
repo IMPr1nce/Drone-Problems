@@ -26,6 +26,10 @@ public class Drone_follow : MonoBehaviour
     public float aimAngleTolerance = 20f;
     public float attackBoundaryDistance = 5f;
 
+    [Header("Audio")]
+    public AudioSource shootAudioSource;
+    public AudioClip shootSound;
+
     private float nextFireTime = 0f;
     private Quaternion modelOffset = Quaternion.identity;
 
@@ -231,6 +235,7 @@ public class Drone_follow : MonoBehaviour
 
         if (firedLeft || firedRight)
         {
+            shootAudioSource.PlayOneShot(shootSound);
             Debug.Log("Drone fired at player.");
             nextFireTime = Time.time + fireCooldown;
         }

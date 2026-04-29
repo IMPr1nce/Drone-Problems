@@ -5,6 +5,8 @@ public class breakable : MonoBehaviour
     [SerializeField] private GameObject brokenVersionPrefab;
     [SerializeField] private GameObject notBrokenVersionPrefab;
 
+    [Header("Audio")]
+    AudioSource audioSource;
     private BoxCollider bc;
 
     private void Awake()
@@ -19,6 +21,7 @@ public class breakable : MonoBehaviour
 
         if (bc != null)
             bc.enabled = true;
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Break()
@@ -31,6 +34,7 @@ public class breakable : MonoBehaviour
 
         if (bc != null)
             bc.enabled = false;
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -38,6 +42,10 @@ public class breakable : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Break();
+            if (audioSource != null)
+            {
+                audioSource.Play();
+            }
         }
     }
 }

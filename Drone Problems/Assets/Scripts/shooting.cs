@@ -5,8 +5,11 @@ public class shooting : MonoBehaviour
     [Header("Aim Setup")]
     public Camera aimCamera;
     public float shootDistance = 1000f;
-    public float hitRadius = 0.4f;
+    public float hitRadius = 0.8f;
     public LayerMask shootMask = ~0;
+
+    [Header("Debug")]
+    public bool showDebugRay = true;
 
     public void Shoot()
     {
@@ -20,7 +23,10 @@ public class shooting : MonoBehaviour
 
         Ray ray = cameraToUse.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 
-        Debug.DrawRay(ray.origin, ray.direction * shootDistance, Color.red, 1f);
+        if (showDebugRay)
+        {
+            Debug.DrawRay(ray.origin, ray.direction * shootDistance, Color.red, 1f);
+        }
 
         RaycastHit[] hits = Physics.SphereCastAll(
             ray,
@@ -32,39 +38,70 @@ public class shooting : MonoBehaviour
 
         System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
+        GameObject bestTarget = null;
+        float bestDistanceFromCenter = Mathf.Infinity;
+
         foreach (RaycastHit hit in hits)
         {
-            if (hit.collider.CompareTag("Player"))
+            if (IsPlayer(hit.collider))
             {
                 continue;
             }
 
-            if (hit.collider.GetComponentInParent<player>() != null)
+            GameObject target = GetShootableTarget(hit.collider);
+
+            if (target != null)
             {
-                continue;
+                float distanceFromCenter = Vector3.Cross(ray.direction, hit.point - ray.origin).magnitude;
+
+                if (distanceFromCenter < bestDistanceFromCenter)
+                {
+                    bestDistanceFromCenter = distanceFromCenter;
+                    bestTarget = target;
+                }
             }
+        }
 
-            Drone_follow drone = hit.collider.GetComponentInParent<Drone_follow>();
-
-            if (drone != null)
-            {
-                Debug.Log("Player shot and destroyed drone: " + drone.name);
-                Destroy(drone.gameObject);
-                return;
-            }
-
-            if (hit.collider.CompareTag("Enemy"))
-            {
-                Debug.Log("Player shot and destroyed enemy: " + hit.collider.name);
-                Destroy(hit.collider.transform.root.gameObject);
-                return;
-            }
-
-            Debug.Log("Shot hit object: " + hit.collider.name);
+        if (bestTarget != null)
+        {
+            Debug.Log("Player shot and destroyed: " + bestTarget.name);
+            Destroy(bestTarget);
             return;
         }
 
         Debug.Log("Shot missed.");
+    }
+
+    private bool IsPlayer(Collider collider)
+    {
+        if (collider.CompareTag("Player"))
+        {
+            return true;
+        }
+
+        if (collider.GetComponentInParent<player>() != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private GameObject GetShootableTarget(Collider collider)
+    {
+        Drone_follow drone = collider.GetComponentInParent<Drone_follow>();
+
+        if (drone != null)
+        {
+            return drone.gameObject;
+        }
+
+        if (collider.CompareTag("Enemy"))
+        {
+            return collider.transform.root.gameObject;
+        }
+
+        return null;
     }
 
     Camera GetCamera()

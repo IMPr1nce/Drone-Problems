@@ -18,6 +18,12 @@ public class player : MonoBehaviour
     [Header("Coins")]
     public int coins = 0;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip coinPickupSound;
+    public AudioClip bulletPickupSound;
+    public AudioClip shootingSound;
+
     public float bulletSpeed = 20f;
     public float fireInterval = 0.2f;
 
@@ -35,6 +41,11 @@ public class player : MonoBehaviour
     void Awake()
     {
         cc = GetComponent<CharacterController>();
+
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
     }
 
     void Start()
@@ -90,33 +101,34 @@ public class player : MonoBehaviour
     }
 
     public void shoot()
-{
-    if (shootingScript == null)
     {
-        shootingScript = FindFirstObjectByType<shooting>();
-
         if (shootingScript == null)
         {
-            Debug.LogWarning("No shooting script found. Assign Main Camera to Shooting Script on Player.");
+            shootingScript = FindFirstObjectByType<shooting>();
+
+            if (shootingScript == null)
+            {
+                Debug.LogWarning("No shooting script found. Assign Main Camera to Shooting Script on Player.");
+                return;
+            }
+        }
+
+        if (Time.time < nextShootTime)
+        {
             return;
         }
-    }
 
-    if (Time.time < nextShootTime)
-    {
-        return;
-    }
+        if (current_bullets <= 0)
+        {
+            Debug.Log("Out of bullets.");
+            return;
+        }
 
-    if (current_bullets <= 0)
-    {
-        Debug.Log("Out of bullets.");
-        return;
+        shootingScript.Shoot();
+        audioSource.PlayOneShot(shootingSound);
+        current_bullets--;
+        nextShootTime = Time.time + fireInterval;
     }
-
-    shootingScript.Shoot();
-    current_bullets--;
-    nextShootTime = Time.time + fireInterval;
-}
 
     public void Jump()
     {
@@ -151,11 +163,14 @@ public class player : MonoBehaviour
     {
         coins += amount;
         Debug.Log("Coins: " + coins);
+        audioSource.PlayOneShot(coinPickupSound);
     }
+
 
 
     public void AddBullets(int amount)
     {
+        audioSource.PlayOneShot(bulletPickupSound);
         current_bullets += amount;
 
         if (current_bullets > max_bullets)
