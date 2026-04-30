@@ -10,16 +10,18 @@ public class DroneLootDropper : MonoBehaviour
     [Range(0f, 100f)]
     public float coinDropChance = 80f;
 
-    [Header("Drop Surface Detection")]
-    public float rayStartHeight = 2f;
+    [Header("Drop Position")]
+    public float rayStartHeight = 3f;
     public float maxDropDistance = 100f;
-    public float surfaceOffset = 0.5f;
+    public float surfaceOffset = 0.35f;
+    public float fallbackGroundY = 1f;
+    public float randomSideOffset = 0.5f;
+
+    [Header("Drop Surface Mask")]
     public LayerMask dropSurfaceMask = ~0;
 
     public void DropLoot()
     {
-        Debug.Log("DropLoot was called from: " + gameObject.name);
-
         if (coinPrefab == null || magazinePrefab == null)
         {
             Debug.LogWarning("Coin or Magazine prefab is missing.");
@@ -49,7 +51,14 @@ public class DroneLootDropper : MonoBehaviour
 
     Vector3 GetDropPosition()
     {
-        Vector3 rayStart = transform.position + Vector3.up * rayStartHeight;
+        Vector3 randomOffset = new Vector3(
+            Random.Range(-randomSideOffset, randomSideOffset),
+            0f,
+            Random.Range(-randomSideOffset, randomSideOffset)
+        );
+
+        Vector3 startPosition = transform.position + randomOffset;
+        Vector3 rayStart = startPosition + Vector3.up * rayStartHeight;
 
         RaycastHit[] hits = Physics.RaycastAll(
             rayStart,
@@ -63,7 +72,7 @@ public class DroneLootDropper : MonoBehaviour
 
         foreach (RaycastHit hit in hits)
         {
-            if (hit.collider.transform == transform || hit.collider.transform.IsChildOf(transform))
+            if (ShouldIgnoreSurface(hit.collider))
             {
                 continue;
             }
@@ -71,6 +80,41 @@ public class DroneLootDropper : MonoBehaviour
             return hit.point + Vector3.up * surfaceOffset;
         }
 
-        return transform.position + Vector3.up * surfaceOffset;
+        return new Vector3(startPosition.x, fallbackGroundY, startPosition.z);
+    }
+
+    bool ShouldIgnoreSurface(Collider collider)
+    {
+        if (collider == null)
+        {
+            return true;
+        }
+
+        if (collider.transform == transform || collider.transform.IsChildOf(transform))
+        {
+            return true;
+        }
+
+        if (collider.GetComponentInParent<Drone_follow>() != null)
+        {
+            return true;
+        }
+
+        if (collider.GetComponentInParent<DroneLootDropper>() != null)
+        {
+            return true;
+        }
+
+        if (collider.GetComponentInParent<CoinPickup>() != null)
+        {
+            return true;
+        }
+
+        if (collider.GetComponentInParent<BulletPickup>() != null)
+        {
+            return true;
+        }
+
+        return false;
     }
 }

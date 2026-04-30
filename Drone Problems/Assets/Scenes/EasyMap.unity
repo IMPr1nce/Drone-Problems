@@ -4926,7 +4926,7 @@ MonoBehaviour:
   player: {fileID: 1858084322}
   droneSpawnPointsParent: {fileID: 1234733309}
   maxDrones: 15
-  minDistanceFromPlayer: 20
+  minDistanceFromPlayer: 50
 --- !u!4 &546604745
 Transform:
   m_ObjectHideFlags: 0
@@ -6603,6 +6603,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1782202866593969655, guid: 4543176f31c5f491eb57d8990f03c3f7, type: 3}
   m_PrefabInstance: {fileID: 787570075}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &798520678
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 798520680}
+  - component: {fileID: 798520679}
+  m_Layer: 0
+  m_Name: CheatCodeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &798520679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798520678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ab054bf408474495935ebcec0e41ae0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CheatCodeManager
+  playerScript: {fileID: 1858084323}
+  healthCheatAmount: 100
+  bulletCheatAmount: 500
+  coinCheatAmount: 50
+--- !u!4 &798520680
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 798520678}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 38.77584, y: 0, z: 106.88039}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &814551506
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15663,6 +15711,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1782202866593969655, guid: 4543176f31c5f491eb57d8990f03c3f7, type: 3}
   m_PrefabInstance: {fileID: 2081111759}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2085107884
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1417168949208429265, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 11.05064
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417168949208429265, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0000011639854
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417168949208429265, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 16.774076
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417168949208429265, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417168949208429265, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417168949208429265, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417168949208429265, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417168949208429265, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417168949208429265, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1417168949208429265, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1442232480211736640, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
+      propertyPath: m_Name
+      value: Destructible Wall
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
 --- !u!1 &2087459846
 GameObject:
   m_ObjectHideFlags: 0
@@ -16178,3 +16283,5 @@ SceneRoots:
   - {fileID: 1874613446}
   - {fileID: 1234733309}
   - {fileID: 66718054}
+  - {fileID: 2085107884}
+  - {fileID: 798520680}

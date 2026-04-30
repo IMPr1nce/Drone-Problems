@@ -811,7 +811,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Drone_follow
   target: {fileID: 0}
   forwardFocus: {fileID: 3331001037121821167}
-  moveSpeed: 5
+  moveSpeed: 10
   turnSpeed: 720
   obstacleMask:
     serializedVersion: 2
@@ -842,11 +842,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   drone: {fileID: 4497431471462254722}
-  roamRadius: 12
-  minRoamDistance: 5
+  roamRadius: 20
+  minRoamDistance: 10
   roamWaitTime: 0.5
   roamPointReachDistance: 10
   roamPointAttempts: 30
+  useHeightLimits: 1
+  minRoamY: 5
+  maxRoamY: 15
   detectionRange: 40
   loseRange: 50
   visionAngle: 270
@@ -970,6 +973,8 @@ MonoBehaviour:
   rayStartHeight: 2
   maxDropDistance: 100
   surfaceOffset: 0.5
+  fallbackGroundY: 1
+  randomSideOffset: 0.5
   dropSurfaceMask:
     serializedVersion: 2
     m_Bits: 4294967295

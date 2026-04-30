@@ -7,11 +7,16 @@ public class Drone_AI : MonoBehaviour
     public Drone_follow drone;
 
     [Header("Roaming")]
-    public float roamRadius = 25f;
-    public float minRoamDistance = 10f;
+    public float roamRadius = 45f;
+    public float minRoamDistance = 15f;
     public float roamWaitTime = 0.5f;
     public float roamPointReachDistance = 1.5f;
     public int roamPointAttempts = 30;
+
+    [Header("Height Limits")]
+    public bool useHeightLimits = true;
+    public float minRoamY = 3f;
+    public float maxRoamY = 12f;
 
     [Header("Detection")]
     public float detectionRange = 25f;
@@ -82,62 +87,85 @@ public class Drone_AI : MonoBehaviour
                 }
             }
 
+            ClampCurrentHeight();
+
             yield return null;
         }
     }
 
     IEnumerator AttackRoutine()
-{
-    lostPlayerTimer = 0f;
-
-    while (drone.target != null)
     {
-        if (CanKeepTrackingPlayer())
-        {
-            lostPlayerTimer = 0f;
-        }
-        else
-        {
-            lostPlayerTimer += Time.deltaTime;
+        lostPlayerTimer = 0f;
 
-            if (lostPlayerTimer >= losePlayerDelay)
+        while (drone.target != null)
+        {
+            if (CanKeepTrackingPlayer())
             {
-                yield break;
+                lostPlayerTimer = 0f;
             }
+            else
+            {
+                lostPlayerTimer += Time.deltaTime;
+
+                if (lostPlayerTimer >= losePlayerDelay)
+                {
+                    yield break;
+                }
+            }
+
+            Vector3 movementTarget = drone.target.position;
+            Vector3 aimTarget = drone.target.position + Vector3.up * drone.aimHeight;
+
+            if (useHeightLimits)
+            {
+                movementTarget.y = Mathf.Clamp(movementTarget.y, minRoamY, maxRoamY);
+            }
+
+            float distanceToPlayer = Vector3.Distance(transform.position, drone.target.position);
+
+            drone.RotateTowardPointFree(aimTarget);
+
+            if (distanceToPlayer <= drone.shootingDistance)
+            {
+                drone.ShootAtTarget();
+            }
+
+            if (distanceToPlayer > drone.attackBoundaryDistance)
+            {
+                drone.MoveTowardPointFree(movementTarget);
+            }
+
+            ClampCurrentHeight();
+
+            yield return null;
         }
-
-        Vector3 movementTarget = drone.target.position;
-        Vector3 aimTarget = drone.target.position + Vector3.up * drone.aimHeight;
-
-        float distanceToPlayer = Vector3.Distance(transform.position, drone.target.position);
-
-        // Always fix angle toward the player, even when the drone stops moving.
-        drone.RotateTowardPointFree(aimTarget);
-
-        // Shoot whenever inside shooting range.
-        if (distanceToPlayer <= drone.shootingDistance)
-        {
-            drone.ShootAtTarget();
-        }
-
-        // Keep moving toward the player until the drone reaches the boundary.
-        if (distanceToPlayer > drone.attackBoundaryDistance)
-        {
-            drone.MoveTowardPointFree(movementTarget);
-        }
-
-        yield return null;
     }
-}
 
     Vector3 GetRandomRoamPoint()
     {
         for (int i = 0; i < roamPointAttempts; i++)
         {
-            Vector3 randomDirection = Random.onUnitSphere;
+            Vector2 randomCircle = Random.insideUnitCircle.normalized;
             float randomDistance = Random.Range(minRoamDistance, roamRadius);
 
-            Vector3 roamPoint = transform.position + randomDirection * randomDistance;
+            float randomY = transform.position.y;
+
+            if (useHeightLimits)
+            {
+                randomY = Random.Range(minRoamY, maxRoamY);
+            }
+            else
+            {
+                randomY = transform.position.y + Random.Range(-5f, 5f);
+            }
+
+            Vector3 roamPoint = transform.position + new Vector3(
+                randomCircle.x * randomDistance,
+                0f,
+                randomCircle.y * randomDistance
+            );
+
+            roamPoint.y = randomY;
 
             if (drone.IsPointBlocked(roamPoint))
             {
@@ -151,6 +179,18 @@ public class Drone_AI : MonoBehaviour
         }
 
         return transform.position;
+    }
+
+    void ClampCurrentHeight()
+    {
+        if (!useHeightLimits)
+        {
+            return;
+        }
+
+        Vector3 position = transform.position;
+        position.y = Mathf.Clamp(position.y, minRoamY, maxRoamY);
+        transform.position = position;
     }
 
     bool CanSeePlayer()
