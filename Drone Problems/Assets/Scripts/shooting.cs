@@ -5,75 +5,122 @@ public class shooting : MonoBehaviour
     [Header("Aim Setup")]
     public Camera aimCamera;
     public float shootDistance = 1000f;
-    public float hitRadius = 0.8f;
     public LayerMask shootMask = ~0;
+
+    [Header("Built In Crosshair")]
+    public bool drawBuiltInCrosshair = true;
+    public int crosshairSize = 20;
+    public Color normalColor = Color.green;
+    public Color enemyAimColor = Color.red;
 
     [Header("Debug")]
     public bool showDebugRay = true;
 
-    public void Shoot()
-    {
-        Camera cameraToUse = GetCamera();
+    private GameObject currentTarget;
 
-        if (cameraToUse == null)
+    void Update()
+    {
+        currentTarget = FindShootableTarget();
+    }
+
+    void OnGUI()
+    {
+        if (!drawBuiltInCrosshair)
         {
-            Debug.LogWarning("No camera found for shooting.");
             return;
         }
 
-        Ray ray = cameraToUse.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        Color oldColor = GUI.color;
+        GUI.color = currentTarget != null ? enemyAimColor : normalColor;
 
-        if (showDebugRay)
-        {
-            Debug.DrawRay(ray.origin, ray.direction * shootDistance, Color.red, 1f);
-        }
+        float x = (Screen.width - crosshairSize) / 2f;
+        float y = (Screen.height - crosshairSize) / 2f;
 
-        RaycastHit[] hits = Physics.SphereCastAll(
-            ray,
-            hitRadius,
-            shootDistance,
-            shootMask,
-            QueryTriggerInteraction.Collide
+        GUI.DrawTexture(
+            new Rect(x, y, crosshairSize, crosshairSize),
+            Texture2D.whiteTexture
         );
 
-        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+        GUI.color = oldColor;
+    }
 
-        GameObject bestTarget = null;
-        float bestDistanceFromCenter = Mathf.Infinity;
+    public void Shoot()
+    {
+        GameObject target = FindShootableTarget();
 
-        foreach (RaycastHit hit in hits)
+        if (target != null)
         {
-            if (IsPlayer(hit.collider))
-            {
-                continue;
-            }
+            DropLootIfPossible(target);
 
-            GameObject target = GetShootableTarget(hit.collider);
+            Debug.Log("Player shot and destroyed: " + target.name);
 
-            if (target != null)
-            {
-                float distanceFromCenter = Vector3.Cross(ray.direction, hit.point - ray.origin).magnitude;
-
-                if (distanceFromCenter < bestDistanceFromCenter)
-                {
-                    bestDistanceFromCenter = distanceFromCenter;
-                    bestTarget = target;
-                }
-            }
-        }
-
-        if (bestTarget != null)
-        {
-            DropLootIfPossible(bestTarget);
-
-            Debug.Log("Player shot and destroyed: " + bestTarget.name);
-
-            Destroy(bestTarget);
+            Destroy(target);
             return;
         }
 
         Debug.Log("Shot missed.");
     }
+
+    private GameObject FindShootableTarget()
+{
+    Camera cameraToUse = GetCamera();
+
+    if (cameraToUse == null)
+    {
+        return null;
+    }
+
+    Ray ray = cameraToUse.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+
+    if (showDebugRay)
+    {
+        Debug.DrawRay(ray.origin, ray.direction * shootDistance, Color.red, 0.05f);
+    }
+
+    RaycastHit[] hits = Physics.RaycastAll(
+        ray,
+        shootDistance,
+        shootMask,
+        QueryTriggerInteraction.Collide
+    );
+
+    System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+    foreach (RaycastHit hit in hits)
+    {
+        if (IsPlayer(hit.collider))
+        {
+            continue;
+        }
+
+        if (hit.collider.GetComponentInParent<player_bullet>() != null)
+        {
+            continue;
+        }
+
+        if (hit.collider.GetComponentInParent<CoinPickup>() != null)
+        {
+            continue;
+        }
+
+        if (hit.collider.GetComponentInParent<BulletPickup>() != null)
+        {
+            continue;
+        }
+
+        GameObject target = GetShootableTarget(hit.collider);
+
+        if (target != null)
+        {
+            return target;
+        }
+
+        Debug.Log("Shot blocked by: " + hit.collider.gameObject.name);
+        return null;
+    }
+
+    return null;
+}
 
     private void DropLootIfPossible(GameObject target)
     {
@@ -91,12 +138,7 @@ public class shooting : MonoBehaviour
 
         if (lootDropper != null)
         {
-            Debug.Log("Loot dropper found. Dropping loot.");
             lootDropper.DropLoot();
-        }
-        else
-        {
-            Debug.LogWarning("No DroneLootDropper found on: " + target.name);
         }
     }
 
@@ -132,7 +174,7 @@ public class shooting : MonoBehaviour
         return null;
     }
 
-    Camera GetCamera()
+    private Camera GetCamera()
     {
         if (aimCamera != null)
         {
