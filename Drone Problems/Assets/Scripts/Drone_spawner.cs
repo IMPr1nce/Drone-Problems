@@ -7,17 +7,20 @@ public class Drone_spawner : MonoBehaviour
     public GameObject dronePrefab;
     public Transform player;
 
-    [Header("Spawn Points")]
-    public List<Transform> spawnPoints = new List<Transform>();
+    [Header("Drone Spawn Points Parent")]
+    public Transform droneSpawnPointsParent;
 
     [Header("Spawn Settings")]
     public int maxDrones = 5;
+    public float minDistanceFromPlayer = 8f;
 
     private List<GameObject> activeDrones = new List<GameObject>();
+    private List<Transform> droneSpawnPoints = new List<Transform>();
 
     void Start()
     {
         FindPlayerIfNeeded();
+        GetDroneSpawnPoints();
 
         for (int i = 0; i < maxDrones; i++)
         {
@@ -52,36 +55,55 @@ public class Drone_spawner : MonoBehaviour
         }
     }
 
+    void GetDroneSpawnPoints()
+    {
+        droneSpawnPoints.Clear();
+
+        if (droneSpawnPointsParent == null)
+        {
+            Debug.LogError("Drone Spawn Points Parent is missing.");
+            return;
+        }
+
+        foreach (Transform child in droneSpawnPointsParent)
+        {
+            droneSpawnPoints.Add(child);
+        }
+
+        Debug.Log("Drone spawn points found: " + droneSpawnPoints.Count);
+    }
+
     void SpawnDrone()
     {
-        if (dronePrefab == null || player == null)
+        if (dronePrefab == null)
         {
+            Debug.LogError("Drone Prefab is missing.");
             return;
         }
 
-        if (spawnPoints == null || spawnPoints.Count == 0)
+        if (droneSpawnPoints.Count == 0)
         {
-            Debug.LogWarning("No drone spawn points assigned.");
+            Debug.LogError("No drone spawn points found.");
             return;
         }
 
-        Transform randomSpawnPoint = GetRandomSpawnPoint();
+        Transform selectedPoint = GetRandomValidSpawnPoint();
 
-        if (randomSpawnPoint == null)
+        if (selectedPoint == null)
         {
-            Debug.LogWarning("Random spawn point is missing.");
+            Debug.LogWarning("No valid drone spawn point found.");
             return;
         }
 
         GameObject newDrone = Instantiate(
             dronePrefab,
-            randomSpawnPoint.position,
-            randomSpawnPoint.rotation
+            selectedPoint.position,
+            selectedPoint.rotation
         );
 
         Drone_follow droneFollow = newDrone.GetComponent<Drone_follow>();
 
-        if (droneFollow != null)
+        if (droneFollow != null && player != null)
         {
             droneFollow.target = player;
         }
@@ -89,9 +111,27 @@ public class Drone_spawner : MonoBehaviour
         activeDrones.Add(newDrone);
     }
 
-    Transform GetRandomSpawnPoint()
+    Transform GetRandomValidSpawnPoint()
     {
-        int randomIndex = Random.Range(0, spawnPoints.Count);
-        return spawnPoints[randomIndex];
+        int attempts = 50;
+
+        for (int i = 0; i < attempts; i++)
+        {
+            Transform randomPoint = droneSpawnPoints[Random.Range(0, droneSpawnPoints.Count)];
+
+            if (player == null)
+            {
+                return randomPoint;
+            }
+
+            float distanceFromPlayer = Vector3.Distance(randomPoint.position, player.position);
+
+            if (distanceFromPlayer >= minDistanceFromPlayer)
+            {
+                return randomPoint;
+            }
+        }
+
+        return droneSpawnPoints[Random.Range(0, droneSpawnPoints.Count)];
     }
-} 
+}
