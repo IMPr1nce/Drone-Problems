@@ -36,7 +36,11 @@ public class player : MonoBehaviour
     public Transform groundCheck;
     public LayerMask groundLayer;
     Vector3 gravity_velocity;
-    public float jumppower = 100f;
+    public float jumppower = 10f;
+
+    [Header("Jumping")]
+    public int extraJumpsAllowed = 1;
+    private int extraJumpsUsed = 0;
 
     void Awake()
     {
@@ -59,6 +63,11 @@ public class player : MonoBehaviour
     void Update()
     {
         ApplyGravity();
+
+        if (onGround())
+        {
+            extraJumpsUsed = 0;
+        }
     }
 
     public void ApplyGravity()
@@ -125,7 +134,12 @@ public class player : MonoBehaviour
         }
 
         shootingScript.Shoot();
-        audioSource.PlayOneShot(shootingSound);
+
+        if (audioSource != null && shootingSound != null)
+        {
+            audioSource.PlayOneShot(shootingSound);
+        }
+
         current_bullets--;
         nextShootTime = Time.time + fireInterval;
     }
@@ -134,11 +148,13 @@ public class player : MonoBehaviour
     {
         if (onGround())
         {
-            gravity_velocity = new Vector3(0, jumppower * 2, 0);
+            gravity_velocity.y = jumppower;
+            extraJumpsUsed = 0;
         }
-        else
+        else if (extraJumpsUsed < extraJumpsAllowed)
         {
-            gravity_velocity = new Vector3(0, jumppower, 0);
+            gravity_velocity.y = jumppower;
+            extraJumpsUsed++;
         }
     }
 
@@ -163,14 +179,20 @@ public class player : MonoBehaviour
     {
         coins += amount;
         Debug.Log("Coins: " + coins);
-        audioSource.PlayOneShot(coinPickupSound);
+
+        if (audioSource != null && coinPickupSound != null)
+        {
+            audioSource.PlayOneShot(coinPickupSound);
+        }
     }
-
-
 
     public void AddBullets(int amount)
     {
-        audioSource.PlayOneShot(bulletPickupSound);
+        if (audioSource != null && bulletPickupSound != null)
+        {
+            audioSource.PlayOneShot(bulletPickupSound);
+        }
+
         current_bullets += amount;
 
         if (current_bullets > max_bullets)

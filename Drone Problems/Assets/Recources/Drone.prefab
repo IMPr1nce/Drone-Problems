@@ -755,7 +755,7 @@ MonoBehaviour:
   aimAngleTolerance: 1
   attackBoundaryDistance: 10
   shootAudioSource: {fileID: 6466717495332247089}
-  shootSound: {fileID: 8300000, guid: f44ffbfb72adb4efe938b418b31e5609, type: 3}
+  shootSound: {fileID: 8300000, guid: a244dddec92624163ad96e30eed5d6d7, type: 3}
 --- !u!114 &-8039118867989910084
 MonoBehaviour:
   m_ObjectHideFlags: 0

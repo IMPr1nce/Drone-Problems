@@ -7,12 +7,11 @@ public class Drone_spawner : MonoBehaviour
     public GameObject dronePrefab;
     public Transform player;
 
+    [Header("Spawn Points")]
+    public List<Transform> spawnPoints = new List<Transform>();
+
     [Header("Spawn Settings")]
     public int maxDrones = 5;
-    public float spawnRadius = 20f;
-    public float minSpawnDistance = 10f;
-    public float spawnHeightMin = 3f;
-    public float spawnHeightMax = 8f;
 
     private List<GameObject> activeDrones = new List<GameObject>();
 
@@ -60,12 +59,24 @@ public class Drone_spawner : MonoBehaviour
             return;
         }
 
-        Vector3 spawnPosition = GetSpawnPosition();
+        if (spawnPoints == null || spawnPoints.Count == 0)
+        {
+            Debug.LogWarning("No drone spawn points assigned.");
+            return;
+        }
+
+        Transform randomSpawnPoint = GetRandomSpawnPoint();
+
+        if (randomSpawnPoint == null)
+        {
+            Debug.LogWarning("Random spawn point is missing.");
+            return;
+        }
 
         GameObject newDrone = Instantiate(
             dronePrefab,
-            spawnPosition,
-            Quaternion.identity
+            randomSpawnPoint.position,
+            randomSpawnPoint.rotation
         );
 
         Drone_follow droneFollow = newDrone.GetComponent<Drone_follow>();
@@ -78,17 +89,9 @@ public class Drone_spawner : MonoBehaviour
         activeDrones.Add(newDrone);
     }
 
-    Vector3 GetSpawnPosition()
+    Transform GetRandomSpawnPoint()
     {
-        Vector2 circle = Random.insideUnitCircle.normalized * Random.Range(minSpawnDistance, spawnRadius);
-        float yOffset = Random.Range(spawnHeightMin, spawnHeightMax);
-
-        Vector3 spawnPosition = new Vector3(
-            player.position.x + circle.x,
-            player.position.y + yOffset,
-            player.position.z + circle.y
-        );
-
-        return spawnPosition;
+        int randomIndex = Random.Range(0, spawnPoints.Count);
+        return spawnPoints[randomIndex];
     }
-}
+} 
