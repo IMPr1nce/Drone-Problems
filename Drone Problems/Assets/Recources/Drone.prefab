@@ -258,6 +258,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 599faf2c87be748099943f693c57f7ff, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6466717495332247089}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 599faf2c87be748099943f693c57f7ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5977607788900090584}
     - targetCorrespondingSourceObject: {fileID: -8391222552659086748, guid: 599faf2c87be748099943f693c57f7ff, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2901169676760950304}
@@ -879,6 +882,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-5977607788900090584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5047811610492261047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e49ce132431408aad02fec3ee20537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  coinPrefab: {fileID: 1870905501627372241, guid: f2b701b2096c34b6eae3c8c4cda5dff1, type: 3}
+  magazinePrefab: {fileID: 6841049792098133950, guid: c86e872f6b87b43d59644ccbc7bd8cb0, type: 3}
+  coinDropChance: 80
+  dropHeight: 0.5
 --- !u!4 &5568346101037893645 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 599faf2c87be748099943f693c57f7ff, type: 3}

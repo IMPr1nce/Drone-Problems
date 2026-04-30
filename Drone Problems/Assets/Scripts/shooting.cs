@@ -64,12 +64,40 @@ public class shooting : MonoBehaviour
 
         if (bestTarget != null)
         {
+            DropLootIfPossible(bestTarget);
+
             Debug.Log("Player shot and destroyed: " + bestTarget.name);
+
             Destroy(bestTarget);
             return;
         }
 
         Debug.Log("Shot missed.");
+    }
+
+    private void DropLootIfPossible(GameObject target)
+    {
+        DroneLootDropper lootDropper = target.GetComponent<DroneLootDropper>();
+
+        if (lootDropper == null)
+        {
+            lootDropper = target.GetComponentInChildren<DroneLootDropper>();
+        }
+
+        if (lootDropper == null)
+        {
+            lootDropper = target.GetComponentInParent<DroneLootDropper>();
+        }
+
+        if (lootDropper != null)
+        {
+            Debug.Log("Loot dropper found. Dropping loot.");
+            lootDropper.DropLoot();
+        }
+        else
+        {
+            Debug.LogWarning("No DroneLootDropper found on: " + target.name);
+        }
     }
 
     private bool IsPlayer(Collider collider)
