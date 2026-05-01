@@ -3,6 +3,14 @@ using UnityEngine;
 
 public class Drone_spawner : MonoBehaviour
 {
+    [System.Serializable]
+    public class DifficultySpawnSettings
+    {
+        public int maxDrones = 5;
+        public int initialDrones = 3;
+        public float spawnDelay = 0.5f;
+    }
+
     [Header("Spawner Setup")]
     public GameObject dronePrefab;
     public Transform player;
@@ -10,22 +18,52 @@ public class Drone_spawner : MonoBehaviour
     [Header("Drone Spawn Points Parent")]
     public Transform droneSpawnPointsParent;
 
-    [Header("Spawn Settings")]
-    public int maxDrones = 5;
+    [Header("Common Spawn Settings")]
     public float minDistanceFromPlayer = 8f;
+
+    [Header("Easy Mode")]
+    public DifficultySpawnSettings easySettings = new DifficultySpawnSettings
+    {
+        maxDrones = 3,
+        initialDrones = 2,
+        spawnDelay = 1f
+    };
+
+    [Header("Medium Mode")]
+    public DifficultySpawnSettings mediumSettings = new DifficultySpawnSettings
+    {
+        maxDrones = 5,
+        initialDrones = 3,
+        spawnDelay = 0.75f
+    };
+
+    [Header("Hard Mode")]
+    public DifficultySpawnSettings hardSettings = new DifficultySpawnSettings
+    {
+        maxDrones = 8,
+        initialDrones = 5,
+        spawnDelay = 0.5f
+    };
+
+    private int currentMaxDrones;
+    private int currentInitialDrones;
+    private float currentSpawnDelay;
 
     private List<GameObject> activeDrones = new List<GameObject>();
     private List<Transform> droneSpawnPoints = new List<Transform>();
 
+    private float nextSpawnTime = 0f;
+
     void Start()
     {
+        ApplySelectedDifficultySettings();
+
         FindPlayerIfNeeded();
         GetDroneSpawnPoints();
 
-        for (int i = 0; i < maxDrones; i++)
-        {
-            SpawnDrone();
-        }
+        SpawnInitialDrones();
+
+        nextSpawnTime = Time.time + currentSpawnDelay;
     }
 
     void Update()
@@ -34,7 +72,48 @@ public class Drone_spawner : MonoBehaviour
 
         activeDrones.RemoveAll(drone => drone == null);
 
-        while (activeDrones.Count < maxDrones)
+        if (activeDrones.Count < currentMaxDrones && Time.time >= nextSpawnTime)
+        {
+            SpawnDrone();
+            nextSpawnTime = Time.time + currentSpawnDelay;
+        }
+    }
+
+    void ApplySelectedDifficultySettings()
+    {
+        DifficultySpawnSettings selectedSettings = easySettings;
+
+        if (GameDifficulty.selectedDifficulty == DifficultyLevel.Easy)
+        {
+            selectedSettings = easySettings;
+        }
+        else if (GameDifficulty.selectedDifficulty == DifficultyLevel.Medium)
+        {
+            selectedSettings = mediumSettings;
+        }
+        else if (GameDifficulty.selectedDifficulty == DifficultyLevel.Hard)
+        {
+            selectedSettings = hardSettings;
+        }
+
+        currentMaxDrones = selectedSettings.maxDrones;
+        currentInitialDrones = selectedSettings.initialDrones;
+        currentSpawnDelay = selectedSettings.spawnDelay;
+
+        if (currentInitialDrones > currentMaxDrones)
+        {
+            currentInitialDrones = currentMaxDrones;
+        }
+
+        Debug.Log("Difficulty: " + GameDifficulty.selectedDifficulty);
+        Debug.Log("Max Drones: " + currentMaxDrones);
+        Debug.Log("Initial Drones: " + currentInitialDrones);
+        Debug.Log("Spawn Delay: " + currentSpawnDelay);
+    }
+
+    void SpawnInitialDrones()
+    {
+        for (int i = 0; i < currentInitialDrones; i++)
         {
             SpawnDrone();
         }

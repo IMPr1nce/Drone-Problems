@@ -7,19 +7,26 @@ public class ContainerMazeSpawner : MonoBehaviour
     public GameObject[] prefabsToSpawn;
 
     [Header("Maze Area")]
-    public float width = 40f;
-    public float length = 40f;
+    public float width = 25f;
+    public float length = 25f;
 
     [Header("Spawn Settings")]
-    public int numberOfObjects = 20;
-    public float extraSpaceBetweenObjects = 4f;
-    public float edgePadding = 3f;
+    public int numberOfObjects = 30;
+    public float gridCellSize = 2.5f;
+    public float extraSpaceBetweenObjects = 0.5f;
+    public float edgePadding = 1.5f;
     public float spawnY = 0f;
 
     [Header("Random Rotation")]
     public bool randomRotation = true;
 
+    [Header("Random Seed")]
+    public bool useRandomSeed = true;
+    public int seed = 12345;
+
+    private List<Vector3> gridPoints = new List<Vector3>();
     private List<PlacedObject> placedObjects = new List<PlacedObject>();
+    private Dictionary<GameObject, Vector3> prefabSizeCache = new Dictionary<GameObject, Vector3>();
 
     private struct PlacedObject
     {
@@ -48,13 +55,23 @@ public class ContainerMazeSpawner : MonoBehaviour
             return;
         }
 
-        int spawned = 0;
-        int attempts = 0;
-        int maxAttempts = 5000;
-
-        while (spawned < numberOfObjects && attempts < maxAttempts)
+        if (!useRandomSeed)
         {
-            attempts++;
+            Random.InitState(seed);
+        }
+
+        CachePrefabSizes();
+        GenerateGridPoints();
+        ShuffleGridPoints();
+
+        int spawned = 0;
+
+        foreach (Vector3 point in gridPoints)
+        {
+            if (spawned >= numberOfObjects)
+            {
+                break;
+            }
 
             GameObject prefab = prefabsToSpawn[Random.Range(0, prefabsToSpawn.Length)];
 
@@ -63,30 +80,14 @@ public class ContainerMazeSpawner : MonoBehaviour
                 continue;
             }
 
-            Vector3 prefabSize = GetPrefabSize(prefab);
+            Vector3 prefabSize = prefabSizeCache[prefab];
 
             bool rotateObject = randomRotation && Random.Range(0, 2) == 1;
 
             float sizeX = rotateObject ? prefabSize.z : prefabSize.x;
             float sizeZ = rotateObject ? prefabSize.x : prefabSize.z;
 
-            float minX = transform.position.x - width / 2f + sizeX / 2f + edgePadding;
-            float maxX = transform.position.x + width / 2f - sizeX / 2f - edgePadding;
-
-            float minZ = transform.position.z - length / 2f + sizeZ / 2f + edgePadding;
-            float maxZ = transform.position.z + length / 2f - sizeZ / 2f - edgePadding;
-
-            if (minX >= maxX || minZ >= maxZ)
-            {
-                Debug.LogWarning("Maze area is too small for one of the prefabs.");
-                continue;
-            }
-
-            Vector3 spawnPosition = new Vector3(
-                Random.Range(minX, maxX),
-                spawnY,
-                Random.Range(minZ, maxZ)
-            );
+            Vector3 spawnPosition = new Vector3(point.x, spawnY, point.z);
 
             if (OverlapsExistingObject(spawnPosition, sizeX, sizeZ))
             {
@@ -97,22 +98,71 @@ public class ContainerMazeSpawner : MonoBehaviour
                 ? Quaternion.Euler(0f, 90f, 0f)
                 : Quaternion.identity;
 
-            Instantiate(prefab, spawnPosition, rotation);
+            Instantiate(prefab, spawnPosition, rotation, transform);
 
             placedObjects.Add(new PlacedObject(spawnPosition, sizeX, sizeZ));
             spawned++;
         }
 
-        Debug.Log("Spawned maze objects: " + spawned);
+        Debug.Log("Spawned maze objects: " + spawned + " / " + numberOfObjects);
+    }
+
+    void GenerateGridPoints()
+    {
+        gridPoints.Clear();
+
+        float minX = transform.position.x - width / 2f + edgePadding;
+        float maxX = transform.position.x + width / 2f - edgePadding;
+
+        float minZ = transform.position.z - length / 2f + edgePadding;
+        float maxZ = transform.position.z + length / 2f - edgePadding;
+
+        for (float x = minX; x <= maxX; x += gridCellSize)
+        {
+            for (float z = minZ; z <= maxZ; z += gridCellSize)
+            {
+                gridPoints.Add(new Vector3(x, spawnY, z));
+            }
+        }
+    }
+
+    void ShuffleGridPoints()
+    {
+        for (int i = 0; i < gridPoints.Count; i++)
+        {
+            int randomIndex = Random.Range(i, gridPoints.Count);
+
+            Vector3 temp = gridPoints[i];
+            gridPoints[i] = gridPoints[randomIndex];
+            gridPoints[randomIndex] = temp;
+        }
+    }
+
+    void CachePrefabSizes()
+    {
+        prefabSizeCache.Clear();
+
+        foreach (GameObject prefab in prefabsToSpawn)
+        {
+            if (prefab == null)
+            {
+                continue;
+            }
+
+            if (!prefabSizeCache.ContainsKey(prefab))
+            {
+                prefabSizeCache.Add(prefab, GetPrefabSize(prefab));
+            }
+        }
     }
 
     Vector3 GetPrefabSize(GameObject prefab)
     {
-        BoxCollider box = prefab.GetComponent<BoxCollider>();
+        BoxCollider box = prefab.GetComponentInChildren<BoxCollider>();
 
         if (box != null)
         {
-            Vector3 scale = prefab.transform.localScale;
+            Vector3 scale = box.transform.lossyScale;
 
             return new Vector3(
                 box.size.x * scale.x,
@@ -128,7 +178,7 @@ public class ContainerMazeSpawner : MonoBehaviour
             return renderer.bounds.size;
         }
 
-        return new Vector3(6f, 2f, 2f);
+        return new Vector3(4f, 2f, 2f);
     }
 
     bool OverlapsExistingObject(Vector3 newPosition, float newSizeX, float newSizeZ)

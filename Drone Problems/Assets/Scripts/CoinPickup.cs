@@ -2,26 +2,61 @@ using UnityEngine;
 
 public class CoinPickup : MonoBehaviour
 {
-    public int coinValue = 1;
-    public float rotationSpeed = 120f;
-    void Update()
-    {
-        transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.World);
-    }
+    [Header("Coin Values")]
+    public int easyCoinValue = 1;
+    public int mediumCoinValue = 2;
+    public int hardCoinValue = 3;
 
-    void OnTriggerEnter(Collider other)
+    private bool pickedUp = false;
+
+    private void OnTriggerEnter(Collider other)
     {
-        player playerScript = other.GetComponent<player>();
+        if (pickedUp)
+        {
+            return;
+        }
+
+        player playerScript = other.GetComponentInParent<player>();
 
         if (playerScript == null)
         {
-            playerScript = other.GetComponentInParent<player>();
+            return;
         }
 
-        if (playerScript != null)
+        pickedUp = true;
+
+        int coinValue = GetCoinValue();
+        playerScript.coins += coinValue;
+
+        if (playerScript.audioSource != null && playerScript.coinPickupSound != null)
         {
-            playerScript.AddCoins(coinValue);
-            Destroy(gameObject);
+            playerScript.audioSource.PlayOneShot(playerScript.coinPickupSound);
         }
+        else
+        {
+            Debug.LogWarning("Player AudioSource or Coin Pickup Sound is missing on the Player script.");
+        }
+
+        Destroy(gameObject);
+    }
+
+    int GetCoinValue()
+    {
+        if (GameDifficulty.selectedDifficulty == DifficultyLevel.Easy)
+        {
+            return easyCoinValue;
+        }
+
+        if (GameDifficulty.selectedDifficulty == DifficultyLevel.Medium)
+        {
+            return mediumCoinValue;
+        }
+
+        if (GameDifficulty.selectedDifficulty == DifficultyLevel.Hard)
+        {
+            return hardCoinValue;
+        }
+
+        return easyCoinValue;
     }
 }

@@ -9,14 +9,14 @@ EditorBuildSettings:
     path: Assets/Scenes/StartMenu.unity
     guid: 6b8f9e70366eb4482a4ae46f149cdb52
   - enabled: 1
-    path: Assets/Scenes/EasyMap.unity
+    path: Assets/Scenes/GameScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MediumMap.unity
-    guid: d380d5bd7a39d439cadf59e5e9b25917
-  - enabled: 1
+    guid: 99305990163ed49b38f8f4db5e426fb2
+  - enabled: 0
     path: Assets/Scenes/HardMap.unity
-    guid: 9a0bf4e649e2048d8b1b48a282e5b0dd
+    guid: d424b46ffb3714e57b5a595cf9fe3bfd
   - enabled: 1
     path: Assets/Scenes/DeathScene.unity
     guid: 61a758ff286534640b9c9c68432eb6fe

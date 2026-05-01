@@ -204,11 +204,13 @@ public class player : MonoBehaviour
     }
 
     void Die()
-{
+    {
     GameStats.finalCoins = coins;
     GameStats.finalBullets = current_bullets;
     GameStats.timeSurvived = Time.timeSinceLevelLoad;
 
+    GameStats.SaveBestCoinsIfNeeded(coins);
+
     SceneManager.LoadScene("DeathScene");
-}
+    }
 }
