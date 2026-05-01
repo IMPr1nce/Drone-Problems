@@ -4925,7 +4925,7 @@ MonoBehaviour:
   dronePrefab: {fileID: 5047811610492261047, guid: 06709327534514aa7883e283fb158601, type: 3}
   player: {fileID: 1858084322}
   droneSpawnPointsParent: {fileID: 1234733309}
-  maxDrones: 15
+  maxDrones: 50
   minDistanceFromPlayer: 50
 --- !u!4 &546604745
 Transform:
