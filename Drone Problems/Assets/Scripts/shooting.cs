@@ -47,11 +47,11 @@ public class shooting : MonoBehaviour
     public void Shoot()
     {
         GameObject target = FindShootableTarget();
-
+        
         if (target != null)
         {
             DropLootIfPossible(target);
-
+            GameStats.dronesKilled++;
             Debug.Log("Player shot and destroyed: " + target.name);
 
             Destroy(target);

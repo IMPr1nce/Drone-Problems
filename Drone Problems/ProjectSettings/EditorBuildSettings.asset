@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/HardMap.unity
     guid: 9a0bf4e649e2048d8b1b48a282e5b0dd
+  - enabled: 1
+    path: Assets/Scenes/DeathScene.unity
+    guid: 61a758ff286534640b9c9c68432eb6fe
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

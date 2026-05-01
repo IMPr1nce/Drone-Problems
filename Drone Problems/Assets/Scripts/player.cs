@@ -204,8 +204,11 @@ public class player : MonoBehaviour
     }
 
     void Die()
-    {
-        Debug.Log("Player died.");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+{
+    GameStats.finalCoins = coins;
+    GameStats.finalBullets = current_bullets;
+    GameStats.timeSurvived = Time.timeSinceLevelLoad;
+
+    SceneManager.LoadScene("DeathScene");
+}
 }
