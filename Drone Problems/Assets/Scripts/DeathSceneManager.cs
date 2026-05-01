@@ -26,6 +26,6 @@ public class DeathScreenManager : MonoBehaviour
 
     void ReturnToStartMenu()
     {
-        SceneManager.LoadScene(startMenuSceneName);
+        SceneManager.LoadScene("StartMenu");
     }
 }
