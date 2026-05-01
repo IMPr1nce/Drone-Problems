@@ -52,13 +52,13 @@ public class shooting : MonoBehaviour
         {
             DropLootIfPossible(target);
             GameStats.dronesKilled++;
-            Debug.Log("Player shot and destroyed: " + target.name);
+            //Debug.Log("Player shot and destroyed: " + target.name);
 
             Destroy(target);
             return;
         }
 
-        Debug.Log("Shot missed.");
+        //Debug.Log("Shot missed.");
     }
 
     private GameObject FindShootableTarget()
@@ -115,7 +115,7 @@ public class shooting : MonoBehaviour
             return target;
         }
 
-        Debug.Log("Shot blocked by: " + hit.collider.gameObject.name);
+        //Debug.Log("Shot blocked by: " + hit.collider.gameObject.name);
         return null;
     }
 

@@ -51,7 +51,7 @@ public class ContainerMazeSpawner : MonoBehaviour
     {
         if (prefabsToSpawn == null || prefabsToSpawn.Length == 0)
         {
-            Debug.LogError("No prefabs added to Prefabs To Spawn.");
+            //Debug.LogError("No prefabs added to Prefabs To Spawn.");
             return;
         }
 
@@ -104,7 +104,7 @@ public class ContainerMazeSpawner : MonoBehaviour
             spawned++;
         }
 
-        Debug.Log("Spawned maze objects: " + spawned + " / " + numberOfObjects);
+        //Debug.Log("Spawned maze objects: " + spawned + " / " + numberOfObjects);
     }
 
     void GenerateGridPoints()

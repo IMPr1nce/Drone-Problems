@@ -35,19 +35,19 @@ public class CheatCodeManager : MonoBehaviour
         if (keyboard.hKey.wasPressedThisFrame)
         {
             playerScript.health = healthCheatAmount;
-            Debug.Log("Cheat activated: Health restored");
+            //Debug.Log("Cheat activated: Health restored");
         }
 
         if (keyboard.bKey.wasPressedThisFrame)
         {
             playerScript.current_bullets += bulletCheatAmount;
-            Debug.Log("Cheat activated: Bullets added");
+            //Debug.Log("Cheat activated: Bullets added");
         }
 
         if (keyboard.cKey.wasPressedThisFrame)
         {
             playerScript.coins += coinCheatAmount;
-            Debug.Log("Cheat activated: Coins added");
+            //Debug.Log("Cheat activated: Coins added");
         }
     }
 }

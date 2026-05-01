@@ -24,7 +24,7 @@ public class DroneLootDropper : MonoBehaviour
     {
         if (coinPrefab == null || magazinePrefab == null)
         {
-            Debug.LogWarning("Coin or Magazine prefab is missing.");
+            //Debug.LogWarning("Coin or Magazine prefab is missing.");
             return;
         }
 
@@ -46,7 +46,7 @@ public class DroneLootDropper : MonoBehaviour
         GameObject droppedItem = Instantiate(prefabToDrop, dropPosition, Quaternion.identity);
         droppedItem.SetActive(true);
 
-        Debug.Log("Dropped item: " + droppedItem.name + " at " + dropPosition);
+        //Debug.Log("Dropped item: " + droppedItem.name + " at " + dropPosition);
     }
 
     Vector3 GetDropPosition()

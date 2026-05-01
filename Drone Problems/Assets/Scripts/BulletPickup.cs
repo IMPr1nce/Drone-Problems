@@ -33,7 +33,7 @@ public class BulletPickup : MonoBehaviour
         if (playerScript != null)
         {
             playerScript.AddBullets(bulletAmount);
-            Debug.Log("Picked up " + bulletAmount + " bullets.");
+            //Debug.Log("Picked up " + bulletAmount + " bullets.");
             Destroy(gameObject);
         }
     }

@@ -105,10 +105,10 @@ public class Drone_spawner : MonoBehaviour
             currentInitialDrones = currentMaxDrones;
         }
 
-        Debug.Log("Difficulty: " + GameDifficulty.selectedDifficulty);
-        Debug.Log("Max Drones: " + currentMaxDrones);
-        Debug.Log("Initial Drones: " + currentInitialDrones);
-        Debug.Log("Spawn Delay: " + currentSpawnDelay);
+        // Debug.Log("Difficulty: " + GameDifficulty.selectedDifficulty);
+        // Debug.Log("Max Drones: " + currentMaxDrones);
+        // Debug.Log("Initial Drones: " + currentInitialDrones);
+        // Debug.Log("Spawn Delay: " + currentSpawnDelay);
     }
 
     void SpawnInitialDrones()
@@ -140,7 +140,7 @@ public class Drone_spawner : MonoBehaviour
 
         if (droneSpawnPointsParent == null)
         {
-            Debug.LogError("Drone Spawn Points Parent is missing.");
+            //Debug.LogError("Drone Spawn Points Parent is missing.");
             return;
         }
 
@@ -149,20 +149,20 @@ public class Drone_spawner : MonoBehaviour
             droneSpawnPoints.Add(child);
         }
 
-        Debug.Log("Drone spawn points found: " + droneSpawnPoints.Count);
+        //Debug.Log("Drone spawn points found: " + droneSpawnPoints.Count);
     }
 
     void SpawnDrone()
     {
         if (dronePrefab == null)
         {
-            Debug.LogError("Drone Prefab is missing.");
+            //Debug.LogError("Drone Prefab is missing.");
             return;
         }
 
         if (droneSpawnPoints.Count == 0)
         {
-            Debug.LogError("No drone spawn points found.");
+            //Debug.LogError("No drone spawn points found.");
             return;
         }
 
@@ -170,7 +170,7 @@ public class Drone_spawner : MonoBehaviour
 
         if (selectedPoint == null)
         {
-            Debug.LogWarning("No valid drone spawn point found.");
+            //Debug.LogWarning("No valid drone spawn point found.");
             return;
         }
 

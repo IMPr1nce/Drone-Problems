@@ -34,7 +34,7 @@ public class CoinPickup : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Player AudioSource or Coin Pickup Sound is missing on the Player script.");
+            //Debug.LogWarning("Player AudioSource or Coin Pickup Sound is missing on the Player script.");
         }
 
         Destroy(gameObject);

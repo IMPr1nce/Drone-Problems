@@ -13,7 +13,7 @@ public class CustomCursor : MonoBehaviour
     {
         if (cursorTexture == null)
         {
-            Debug.LogWarning("No cursor texture assigned.");
+            //Debug.LogWarning("No cursor texture assigned.");
             return;
         }
 

@@ -236,7 +236,7 @@ public class Drone_follow : MonoBehaviour
         if (firedLeft || firedRight)
         {
             shootAudioSource.PlayOneShot(shootSound);
-            Debug.Log("Drone fired at player.");
+            //Debug.Log("Drone fired at player.");
             nextFireTime = Time.time + fireCooldown;
         }
     }
@@ -270,7 +270,7 @@ public class Drone_follow : MonoBehaviour
 
     if (bulletPrefab == null)
     {
-        Debug.LogWarning("Bullet Prefab is missing on the drone.");
+        //Debug.LogWarning("Bullet Prefab is missing on the drone.");
         return false;
     }
 

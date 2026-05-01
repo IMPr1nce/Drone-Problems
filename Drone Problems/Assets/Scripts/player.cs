@@ -117,7 +117,7 @@ public class player : MonoBehaviour
 
             if (shootingScript == null)
             {
-                Debug.LogWarning("No shooting script found. Assign Main Camera to Shooting Script on Player.");
+                //Debug.LogWarning("No shooting script found. Assign Main Camera to Shooting Script on Player.");
                 return;
             }
         }
@@ -129,7 +129,7 @@ public class player : MonoBehaviour
 
         if (current_bullets <= 0)
         {
-            Debug.Log("Out of bullets.");
+            //Debug.Log("Out of bullets.");
             return;
         }
 
@@ -167,7 +167,7 @@ public class player : MonoBehaviour
             health = 0;
         }
 
-        Debug.Log("Player took " + damageAmount + " damage. Health: " + health);
+        //Debug.Log("Player took " + damageAmount + " damage. Health: " + health);
 
         if (health <= 0)
         {
@@ -178,7 +178,7 @@ public class player : MonoBehaviour
     public void AddCoins(int amount)
     {
         coins += amount;
-        Debug.Log("Coins: " + coins);
+        //Debug.Log("Coins: " + coins);
 
         if (audioSource != null && coinPickupSound != null)
         {
@@ -200,7 +200,7 @@ public class player : MonoBehaviour
             current_bullets = max_bullets;
         }
 
-        Debug.Log("Bullets: " + current_bullets);
+        //Debug.Log("Bullets: " + current_bullets);
     }
 
     void Die()
