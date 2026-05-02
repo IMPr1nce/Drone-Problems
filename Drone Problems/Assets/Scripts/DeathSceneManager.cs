@@ -12,7 +12,7 @@ public class DeathScreenManager : MonoBehaviour
 
     [Header("Scene Settings")]
     public string startMenuSceneName = "StartMenu";
-    public float waitTimeBeforeMenu = 5f;
+    public float waitTimeBeforeMenu = 3f;
 
     void Start()
     {

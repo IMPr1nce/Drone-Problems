@@ -151,11 +151,11 @@ MonoBehaviour:
   prefabsToSpawn:
   - {fileID: 1442232480211736640, guid: 23898c60c5dc7462aa911648b70ebd3d, type: 3}
   - {fileID: 1436781030378073933, guid: 4543176f31c5f491eb57d8990f03c3f7, type: 3}
-  width: 80
-  length: 80
-  numberOfObjects: 15
+  width: 70
+  length: 70
+  numberOfObjects: 20
   gridCellSize: 3
-  extraSpaceBetweenObjects: 3
+  extraSpaceBetweenObjects: 2
   edgePadding: 1
   spawnY: 0
   randomRotation: 1
@@ -1479,17 +1479,17 @@ MonoBehaviour:
   droneSpawnPointsParent: {fileID: 1234733309}
   minDistanceFromPlayer: 10
   easySettings:
-    maxDrones: 5
+    maxDrones: 3
     initialDrones: 1
     spawnDelay: 1
   mediumSettings:
-    maxDrones: 10
-    initialDrones: 2
-    spawnDelay: 0.5
+    maxDrones: 6
+    initialDrones: 1
+    spawnDelay: 1
   hardSettings:
-    maxDrones: 15
+    maxDrones: 10
     initialDrones: 3
-    spawnDelay: 0.5
+    spawnDelay: 1
 --- !u!4 &546604745
 Transform:
   m_ObjectHideFlags: 0
@@ -4688,6 +4688,7 @@ GameObject:
   - component: {fileID: 1858084319}
   - component: {fileID: 1858084323}
   - component: {fileID: 1858084324}
+  - component: {fileID: 1858084325}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -4939,6 +4940,28 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1858084325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1858084318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e02acfb044ca4312ac77507e202a46a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PS5ControllerInput
+  playerScript: {fileID: 1858084323}
+  cameraPivot: {fileID: 495042995}
+  pitchCamera: {fileID: 330585546}
+  playerBody: {fileID: 777227580}
+  horizontalSensitivity: 120
+  verticalSensitivity: 120
+  minLookAngle: -80
+  maxLookAngle: 80
+  invertYLook: 0
+  stickDeadzone: 0.1
 --- !u!1 &1874613445
 GameObject:
   m_ObjectHideFlags: 0
